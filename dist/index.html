@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#173f35" />
+    <meta name="description" content="Still — a quiet Pomodoro timer and distraction blocker for gentle focus." />
+    <title>Still — focus, softly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="weather" aria-hidden="true">
+      <div class="rain rain-back"></div>
+      <div class="rain rain-front"></div>
+      <div class="fog fog-a"></div>
+      <div class="fog fog-b"></div>
+    </div>
+
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Still home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>still.</span>
+        </a>
+        <div class="today" id="today">Thursday, October 15</div>
+        <button class="icon-button" id="settingsButton" aria-label="Open settings" title="Settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2v-.08a1.7 1.7 0 0 0-1.1-1.57 1.7 1.7 0 0 0-1.88.34l-.06.06-1.41-1.41.06-.06A1.7 1.7 0 0 0 9.35 15a1.7 1.7 0 0 0-1.56-1.03H7.7v-2h.09a1.7 1.7 0 0 0 1.56-1.1A1.7 1.7 0 0 0 9 9l-.06-.06 1.41-1.42.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.03-1.56V6.3h2v.08a1.7 1.7 0 0 0 1.1 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.42 1.42-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H21v2h-.08A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+        </button>
+      </header>
+
+      <main>
+        <section class="focus-card" aria-labelledby="timerHeading">
+          <div class="mode-switch" role="tablist" aria-label="Timer mode">
+            <button class="mode active" data-mode="focus" role="tab" aria-selected="true">focus</button>
+            <button class="mode" data-mode="short" role="tab" aria-selected="false">short break</button>
+            <button class="mode" data-mode="long" role="tab" aria-selected="false">long break</button>
+          </div>
+
+          <p class="eyebrow" id="timerHeading">one thing at a time</p>
+          <div class="timer" id="timer" aria-live="polite">25:00</div>
+          <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+          <div class="timer-actions">
+            <button class="primary" id="startButton"><span id="startIcon">▶</span><span id="startLabel">begin focus</span></button>
+            <button class="reset" id="resetButton" aria-label="Reset timer" title="Reset timer">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v6h6"/><path d="M5.5 15a7 7 0 1 0 .6-7.7L4 10"/></svg>
+            </button>
+          </div>
+          <p class="shortcut"><kbd>space</kbd> to start · <kbd>r</kbd> to reset</p>
+        </section>
+
+        <aside class="side-column">
+          <section class="panel intention-panel">
+            <div class="panel-heading">
+              <span class="panel-icon">✦</span>
+              <h2>your one thing</h2>
+            </div>
+            <label class="sr-only" for="intention">What are you focusing on?</label>
+            <textarea id="intention" rows="3" maxlength="100" placeholder="What would feel good to finish?"></textarea>
+            <div class="saved-note" id="savedNote">saved quietly</div>
+          </section>
+
+          <section class="panel block-panel">
+            <div class="panel-heading split">
+              <div><span class="panel-icon">⌁</span><h2>quiet mode</h2></div>
+              <label class="switch" title="Block listed sites during focus">
+                <input type="checkbox" id="blockToggle" checked />
+                <span></span>
+              </label>
+            </div>
+            <p class="panel-copy" id="blockStatus">Distracting sites pause when focus begins.</p>
+            <div class="site-list" id="siteList"></div>
+            <form class="add-site" id="siteForm">
+              <input id="siteInput" autocomplete="off" placeholder="add a site…" aria-label="Add a site to block" />
+              <button aria-label="Add site">+</button>
+            </form>
+            <button class="extension-note" id="extensionNote">desktop blocking setup <span>↗</span></button>
+          </section>
+        </aside>
+
+        <section class="bottom-row">
+          <div class="panel ambience-panel">
+            <div class="panel-heading"><span class="panel-icon rain-icon">╲╲</span><h2>rain room</h2></div>
+            <button class="sound-button" id="soundButton" aria-pressed="false">
+              <span class="sound-art"><i></i><i></i><i></i><i></i></span>
+              <span><b id="soundTitle">rain on leaves</b><small id="soundState">tap to listen</small></span>
+              <span class="play" id="soundPlay">▶</span>
+            </button>
+            <label class="volume"><span>soft</span><input type="range" id="volume" min="0" max="100" value="35" /><span>steady</span></label>
+          </div>
+
+          <div class="panel rhythm-panel">
+            <div class="panel-heading split">
+              <div><span class="panel-icon">◌</span><h2>today's rhythm</h2></div>
+              <span class="session-count"><b id="sessionCount">0</b> sessions</span>
+            </div>
+            <div class="rhythm-track" id="rhythmTrack" aria-label="Today's completed focus sessions"></div>
+            <p id="rhythmMessage">A small start is still a start.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="settingsDialog">
+      <form method="dialog" class="dialog-card">
+        <div class="dialog-head"><div><span class="eyebrow">make it yours</span><h2>Timer settings</h2></div><button class="close" value="cancel" aria-label="Close">×</button></div>
+        <label>Focus minutes <input id="focusMinutes" type="number" min="1" max="120" value="25" /></label>
+        <label>Short break <input id="shortMinutes" type="number" min="1" max="30" value="5" /></label>
+        <label>Long break <input id="longMinutes" type="number" min="1" max="60" value="15" /></label>
+        <button class="primary save-settings" id="saveSettings" value="default">save settings</button>
+      </form>
+    </dialog>
+
+    <dialog id="setupDialog">
+      <div class="dialog-card setup-card">
+        <div class="dialog-head"><div><span class="eyebrow">one-time setup</span><h2>Make quiet mode real</h2></div><button class="close" id="closeSetup" aria-label="Close">×</button></div>
+        <p>A normal website can’t control your other tabs. The included Chrome/Edge extension can—and it only blocks the sites you choose while a focus session is running.</p>
+        <ol><li>Download or open the <code>extension</code> folder.</li><li>Open <code>chrome://extensions</code> and turn on Developer mode.</li><li>Choose “Load unpacked” and select that folder.</li></ol>
+        <p class="privacy-note">No accounts. No analytics. Your intentions and history stay on your device.</p>
+        <button class="primary" id="gotIt">got it</button>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script src="app.js"></script>
+  </body>
+</html>

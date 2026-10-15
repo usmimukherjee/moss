@@ -6,7 +6,6 @@ A quiet, local-first focus companion presented as a cohesive forest pixel-art in
 
 - Pomodoro focus, short-break, and long-break modes
 - Matte forest dark mode by default, with an optional light theme and low-contrast monstera and ZZ plant pixel art
-- A tiny pixel-art elf companion that sits quietly beside the focus timer
 - A full pixel UI system with bitmap display type, stepped panels, dithered surfaces, and blocky controls
 - Lexend-first typography with Verdana and Open Sans fallbacks for clear, uncrowded reading
 - A radial time-remaining visualization and optional paced-breathing anchor

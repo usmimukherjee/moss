@@ -1,4 +1,3 @@
-# Moss
+# Moss - Micro Objectives, Small Sprints
 
-A quiet, local-first focus companion presented as a cohesive forest pixel-art interface.
-
+A quiet focus companion

@@ -59,3 +59,7 @@ body{background-color:var(--paper);background-image:linear-gradient(90deg,var(--
 .focus-card,.panel,.blocked-card{background:var(--panel);background-image:none;opacity:1}
 .dialog-card{background:var(--panel-strong);opacity:1}
 .mode-switch,.sound-button,.site-chip,.reset,.tiny-toggle,.dialog-card input[type="number"]{opacity:1}
+
+/* The countdown prioritizes instant recognition while retaining a pixel display frame. */
+.timer{display:inline-block;padding:6px 18px 10px;border:4px solid var(--line-strong);color:#dce6dd;background:var(--deep);font-family:"Lexend",Verdana,"Open Sans",system-ui,sans-serif;font-size:clamp(70px,8vw,104px);font-weight:300;line-height:1;letter-spacing:-.055em;text-shadow:none;font-variant-numeric:tabular-nums}
+@media(max-width:580px){.timer{padding:5px 12px 8px;font-size:64px;letter-spacing:-.055em}}

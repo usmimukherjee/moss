@@ -212,7 +212,7 @@
   els.siteForm.addEventListener("submit", (event) => { event.preventDefault(); const domain = cleanDomain(els.siteInput.value.trim()); if (!domain) return toast("Try a site like reddit.com"); if (!state.sites.includes(domain)) state.sites.push(domain); els.siteInput.value = ""; saveState(); renderSites(); if (state.running && state.mode === "focus") setExtensionFocus(true); });
   els.sound.addEventListener("click", toggleSound);
   els.volume.addEventListener("input", () => { state.volume = Number(els.volume.value); if (audio?.playing) audio.gain.gain.setTargetAtTime(state.volume / 100 * .42, audio.context.currentTime, .04); saveState(); });
-  $("settingsButton").addEventListener("click", () => els.settings.showModal());
+  $("settingsButton")?.addEventListener("click", () => els.settings.showModal());
   els.theme.addEventListener("click", () => { state.theme = state.theme === "dark" ? "light" : "dark"; saveState(); applyTheme(); });
   els.breathToggle.addEventListener("click", () => { state.breathEnabled = !state.breathEnabled; saveState(); renderBreathing(); });
   $("breathSpace").addEventListener("click", () => { state.breathEnabled = !state.breathEnabled; saveState(); renderBreathing(); });

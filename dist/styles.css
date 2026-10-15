@@ -21,3 +21,18 @@ dialog{padding:0;border:0;color:var(--ink);background:transparent}dialog::backdr
 .focus-card{min-height:650px;overflow:visible}.visual-clock{flex:0 0 auto;margin:10px 0 18px}.shortcut{margin:18px 0 0}.timer-actions{flex:0 0 auto}
 @media(max-width:900px){.bottom-row{grid-template-columns:1fr}.anchor-panel{grid-column:auto}.focus-card{min-height:640px}}
 @media(max-width:580px){.mode-row{gap:7px}.timer-settings{font-size:8px}.focus-card{min-height:590px}.visual-clock{margin:4px 0 14px}.shortcut{margin-top:16px}}
+
+/* Matte woodland theme: calm contrast, generous tracking, and quiet edge foliage. */
+:root{--ink:#dbe5dc;--deep:#10231d;--moss:#86a98d;--moss-bright:#adc9ae;--sage:#a4b4a6;--muted:#7f9586;--paper:#10231d;--panel:#183128;--panel-strong:#1b372d;--soft:#213e33;--line:#315145;--line-strong:#496c5d;--shadow:none;--forest-silhouette:#5f846b}
+:root[data-theme="light"]{--ink:#21382f;--deep:#eef0e8;--moss:#55795f;--moss-bright:#3f684f;--sage:#647a69;--muted:#788a7b;--paper:#e7eadf;--panel:#f1f1e8;--panel-strong:#f7f5ec;--soft:#dce4d8;--line:#bdcbbb;--line-strong:#9eb29e;--shadow:none;--forest-silhouette:#78947a}
+body{background:var(--paper);font-family:"Lexend",Verdana,"Open Sans",system-ui,sans-serif;letter-spacing:.005em}
+.weather{opacity:.42}.fog{opacity:.38;filter:blur(90px)}
+.botanical{position:absolute;bottom:-22px;width:clamp(150px,17vw,250px);height:auto;color:var(--forest-silhouette);opacity:.22}
+.botanical-left{left:-42px}.botanical-right{right:-42px;transform:scaleX(-1)}
+.botanical .stem{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}.botanical .leaf{fill:currentColor;stroke:none;opacity:.56}
+.focus-card,.panel,.blocked-card{background:var(--panel);box-shadow:none;backdrop-filter:none}
+.dialog-card{background:var(--panel-strong);box-shadow:none}.mode.active,.primary{box-shadow:none}.ring-glow{display:none}.ring-progress{filter:none}.timer{text-shadow:none}.focus-card.is-running .visual-clock::after{box-shadow:none}.breath-orb{background:var(--moss);box-shadow:none}.rhythm-track span.done{box-shadow:none}.switch span::after{box-shadow:none}
+.today,.mode,.eyebrow,.focus-cue,.shortcut,.panel-copy,.timer-settings,.extension-note,.sound-button small,.volume,.tiny-toggle,.breath-label b,.breath-label small,.session-count,.saved-note{font-family:"Lexend",Verdana,"Open Sans",system-ui,sans-serif;letter-spacing:.035em}
+.today{font-size:12px;letter-spacing:.09em}.mode{font-size:11px}.eyebrow{font-size:11px;letter-spacing:.11em}.focus-cue{font-size:11px;letter-spacing:.06em}.shortcut{font-size:10px}.timer-settings{font-size:10px}.panel-heading h2{font-size:13px}.panel-copy{font-size:11px;line-height:1.65}.site-chip{font-size:10px}.add-site input{font-size:11px}.extension-note{font-size:10px}.sound-button b{font-size:12px}.sound-button small{font-size:10px}.volume,.tiny-toggle{font-size:9px}.breath-label b{font-size:10px}.breath-label small{font-size:9px}.session-count{font-size:10px}.rhythm-panel>p{font-size:11px}
+.primary{border-radius:3px 14px 3px 14px}.focus-card{border-radius:3px 42px 3px 42px}.panel{border-radius:3px 23px 3px 23px}
+@media(max-width:580px){.botanical{width:145px;opacity:.13}.weather{opacity:.34}.mode{font-size:10px}.timer-settings{font-size:9px}}

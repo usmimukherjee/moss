@@ -1,11 +1,12 @@
 # Moss
 
-A quiet, local-first focus companion in forest green, rain, and fog.
+A quiet, local-first focus companion in matte forest green, rain, fog, and subtle botanical textures.
 
 ## What works
 
 - Pomodoro focus, short-break, and long-break modes
-- Deep forest dark mode by default, with an optional light theme
+- Matte forest dark mode by default, with an optional light theme and low-contrast botanical details
+- Lexend-first typography with Verdana and Open Sans fallbacks for clear, uncrowded reading
 - A radial time-remaining visualization and optional paced-breathing anchor
 - Custom timer lengths, keyboard shortcuts, pause/reset, and refresh-safe state
 - A single auto-saving focus intention

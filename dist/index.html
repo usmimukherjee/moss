@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#173f35" />
-    <meta name="description" content="Still — a quiet Pomodoro timer and distraction blocker for gentle focus." />
-    <title>Still — focus, softly</title>
+    <meta name="description" content="Moss — a quiet Pomodoro timer and distraction blocker for gentle focus." />
+    <title>Moss — focus, softly</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -21,25 +21,25 @@
 
     <div class="shell">
       <header class="topbar">
-        <a class="brand" href="#" aria-label="Still home">
+        <a class="brand" href="#" aria-label="Moss home">
           <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span>still.</span>
+          <span>moss.</span>
         </a>
         <div class="today" id="today">Thursday, October 15</div>
         <div class="top-actions">
           <button class="icon-button" id="themeButton" aria-label="Switch to light mode" title="Switch theme"><span aria-hidden="true">☾</span></button>
-          <button class="icon-button" id="settingsButton" aria-label="Open settings" title="Settings">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2v-.08a1.7 1.7 0 0 0-1.1-1.57 1.7 1.7 0 0 0-1.88.34l-.06.06-1.41-1.41.06-.06A1.7 1.7 0 0 0 9.35 15a1.7 1.7 0 0 0-1.56-1.03H7.7v-2h.09a1.7 1.7 0 0 0 1.56-1.1A1.7 1.7 0 0 0 9 9l-.06-.06 1.41-1.42.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.03-1.56V6.3h2v.08a1.7 1.7 0 0 0 1.1 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.42 1.42-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H21v2h-.08A1.7 1.7 0 0 0 19.4 15Z"/></svg>
-          </button>
         </div>
       </header>
 
       <main>
         <section class="focus-card" aria-labelledby="timerHeading">
-          <div class="mode-switch" role="tablist" aria-label="Timer mode">
-            <button class="mode active" data-mode="focus" role="tab" aria-selected="true">focus</button>
-            <button class="mode" data-mode="short" role="tab" aria-selected="false">short break</button>
-            <button class="mode" data-mode="long" role="tab" aria-selected="false">long break</button>
+          <div class="mode-row">
+            <div class="mode-switch" role="tablist" aria-label="Timer mode">
+              <button class="mode active" data-mode="focus" role="tab" aria-selected="true">focus</button>
+              <button class="mode" data-mode="short" role="tab" aria-selected="false">short break</button>
+              <button class="mode" data-mode="long" role="tab" aria-selected="false">long break</button>
+            </div>
+            <button class="timer-settings" id="settingsButton">adjust</button>
           </div>
 
           <div class="visual-clock">

@@ -1,4 +1,4 @@
-# Still
+# Moss
 
 A quiet, local-first focus companion in forest green, rain, and fog.
 
@@ -25,7 +25,7 @@ Browsers do not let ordinary web pages control other tabs, so the hosted version
 1. Open `chrome://extensions` in Chrome, Edge, Brave, or another Chromium browser.
 2. Turn on **Developer mode**.
 3. Choose **Load unpacked** and select the `extension` folder in this project.
-4. Pin **Still**. Clicking its icon opens the full app.
+4. Pin **Moss**. Clicking its icon opens the full app.
 
 The extension uses Chrome's built-in declarative blocking API. It receives no browsing history and sends no data anywhere.
 

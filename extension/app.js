@@ -52,7 +52,7 @@
   function renderTimer() {
     const remaining = remainingSeconds();
     els.timer.textContent = formatTime(remaining);
-    document.title = state.running ? `${formatTime(remaining)} · Still` : "Still — focus, softly";
+    document.title = state.running ? `${formatTime(remaining)} · Moss` : "Moss — focus, softly";
     const total = durationSeconds();
     const completed = Math.min(100, Math.max(0, ((total - remaining) / total) * 100));
     els.progress.style.width = `${completed}%`;

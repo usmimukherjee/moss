@@ -2,9 +2,7 @@
   "manifest_version": 3,
   "name": "Moss — focus, softly",
   "version": "1.0.0",
-  "description": "A quiet Pomodoro timer that gently blocks distracting websites while you focus.",
-  "permissions": ["storage", "alarms", "declarativeNetRequest"],
-  "host_permissions": ["<all_urls>"],
+  "description": "A quiet Pomodoro timer and gentle focus companion.",
   "background": { "service_worker": "background.js" },
   "action": { "default_title": "Open Moss" },
   "commands": {

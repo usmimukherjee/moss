@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#173f35" />
-    <meta name="description" content="Moss — a quiet Pomodoro timer and distraction blocker for gentle focus." />
+    <meta name="description" content="Moss — a quiet Pomodoro timer and gentle focus companion." />
     <title>Moss — focus, softly</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Lexend:wght@300;400;500;600&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -87,21 +88,17 @@
             <div class="saved-note" id="savedNote">saved quietly</div>
           </section>
 
-          <section class="panel block-panel">
+          <section class="panel todo-panel">
             <div class="panel-heading split">
-              <div><span class="panel-icon">⌁</span><h2>quiet mode</h2></div>
-              <label class="switch" title="Block listed sites during focus">
-                <input type="checkbox" id="blockToggle" checked />
-                <span></span>
-              </label>
+              <div><span class="panel-icon">✓</span><h2>not right now</h2></div>
+              <span class="todo-count" id="todoCount">0 left</span>
             </div>
-            <p class="panel-copy" id="blockStatus">Distracting sites pause when focus begins.</p>
-            <div class="site-list" id="siteList"></div>
-            <form class="add-site" id="siteForm">
-              <input id="siteInput" autocomplete="off" placeholder="add a site…" aria-label="Add a site to block" />
-              <button aria-label="Add site">+</button>
+            <p class="todo-empty" id="todoEmpty">A clear list for a quieter mind.</p>
+            <ul class="todo-list" id="todoList" aria-label="Not right now list"></ul>
+            <form class="add-todo" id="todoForm">
+              <input id="todoInput" autocomplete="off" maxlength="80" placeholder="add a task…" aria-label="Add a task" />
+              <button aria-label="Add task">+</button>
             </form>
-            <button class="extension-note" id="extensionNote">desktop blocking setup <span>↗</span></button>
           </section>
         </aside>
 
@@ -147,16 +144,6 @@
         <label>Long break <input id="longMinutes" type="number" min="1" max="60" value="15" /></label>
         <button class="primary save-settings" id="saveSettings" value="default">save settings</button>
       </form>
-    </dialog>
-
-    <dialog id="setupDialog">
-      <div class="dialog-card setup-card">
-        <div class="dialog-head"><div><span class="eyebrow">one-time setup</span><h2>Make quiet mode real</h2></div><button class="close" id="closeSetup" aria-label="Close">×</button></div>
-        <p>A normal website can’t control your other tabs. The included Chrome/Edge extension can—and it only blocks the sites you choose while a focus session is running.</p>
-        <ol><li>Download or open the <code>extension</code> folder.</li><li>Open <code>chrome://extensions</code> and turn on Developer mode.</li><li>Choose “Load unpacked” and select that folder.</li></ol>
-        <p class="privacy-note">No accounts. No analytics. Your intentions and history stay on your device.</p>
-        <button class="primary" id="gotIt">got it</button>
-      </div>
     </dialog>
 
     <div class="toast" id="toast" role="status"></div>

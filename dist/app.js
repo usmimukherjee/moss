@@ -6,8 +6,7 @@
     running: false,
     endAt: null,
     intention: "",
-    sites: ["youtube.com", "instagram.com", "reddit.com"],
-    blocking: true,
+    todos: [],
     sessions: 0,
     sessionDate: new Date().toDateString(),
     volume: 35,
@@ -18,14 +17,13 @@
   const $ = (id) => document.getElementById(id);
   const els = {
     timer: $("timer"), progress: $("progressBar"), start: $("startButton"), startLabel: $("startLabel"), startIcon: $("startIcon"), reset: $("resetButton"),
-    intention: $("intention"), saved: $("savedNote"), blockToggle: $("blockToggle"), blockStatus: $("blockStatus"), siteList: $("siteList"), siteForm: $("siteForm"), siteInput: $("siteInput"),
+    intention: $("intention"), saved: $("savedNote"), todoList: $("todoList"), todoForm: $("todoForm"), todoInput: $("todoInput"), todoCount: $("todoCount"), todoEmpty: $("todoEmpty"),
     sound: $("soundButton"), soundState: $("soundState"), soundPlay: $("soundPlay"), volume: $("volume"), sessionCount: $("sessionCount"), rhythm: $("rhythmTrack"), rhythmMessage: $("rhythmMessage"),
-    settings: $("settingsDialog"), setup: $("setupDialog"), toast: $("toast"),
+    settings: $("settingsDialog"), toast: $("toast"),
     ring: $("ringProgress"), focusCue: $("focusCue"), focusCard: document.querySelector(".focus-card"),
     anchor: document.querySelector(".anchor-panel"), breathCue: $("breathCue"), breathToggle: $("breathToggle"), theme: $("themeButton")
   };
 
-  const isExtension = typeof chrome !== "undefined" && Boolean(chrome.runtime?.id);
   let state = loadState();
   let tickHandle = null;
   let audio = null;
@@ -36,6 +34,7 @@
     try {
       const stored = JSON.parse(localStorage.getItem("stillState")) || {};
       const merged = { ...DEFAULTS, ...stored, durations: { ...DEFAULTS.durations, ...(stored.durations || {}) } };
+      merged.todos = Array.isArray(stored.todos) ? stored.todos.filter(todo => todo && typeof todo.text === "string").map((todo, index) => ({ id: todo.id || `${Date.now()}-${index}`, text: todo.text.slice(0, 80), done: Boolean(todo.done) })) : [];
       if (merged.sessionDate !== new Date().toDateString()) {
         merged.sessions = 0;
         merged.sessionDate = new Date().toDateString();
@@ -82,7 +81,6 @@
     state.running = true;
     state.endAt = Date.now() + state.remaining * 1000;
     saveState();
-    if (state.mode === "focus" && state.blocking) setExtensionFocus(true);
     tickHandle = setInterval(tick, 250);
     renderTimer();
     toast(state.mode === "focus" ? "Focus has begun. Just this one thing." : "Let your mind soften for a moment.");
@@ -93,7 +91,6 @@
     state.running = false;
     state.endAt = null;
     clearInterval(tickHandle);
-    if (state.mode === "focus") setExtensionFocus(false);
     saveState(); renderTimer();
   }
 
@@ -102,7 +99,6 @@
     state.endAt = null;
     state.remaining = durationSeconds();
     clearInterval(tickHandle);
-    if (state.mode === "focus") setExtensionFocus(false);
     saveState(); renderTimer(); toast("Reset. No guilt, just a fresh start.");
   }
 
@@ -117,7 +113,6 @@
     clearInterval(tickHandle);
     if (wasFocus) {
       state.sessions += 1;
-      setExtensionFocus(false);
       state.mode = "short";
     } else state.mode = "focus";
     state.remaining = durationSeconds(state.mode);
@@ -125,33 +120,30 @@
     toast(wasFocus ? "You did it. Time to exhale." : "Welcome back. Ready when you are.");
   }
 
-  async function setExtensionFocus(active) {
-    if (!isExtension) {
-      els.blockStatus.textContent = state.blocking && state.running && state.mode === "focus" ? "Preview mode · add the extension for real blocking." : "Distracting sites pause when focus begins.";
-      return;
-    }
-    try {
-      await chrome.runtime.sendMessage({ type: active ? "START_FOCUS" : "STOP_FOCUS", endAt: state.endAt, sites: state.sites });
-      els.blockStatus.textContent = active ? "Quiet mode is active across this browser." : "Distracting sites pause when focus begins.";
-    } catch { els.blockStatus.textContent = "Quiet mode needs the extension to be reloaded."; }
-  }
-
-  function renderSites() {
-    els.siteList.textContent = "";
-    state.sites.forEach((site, index) => {
-      const chip = document.createElement("span"); chip.className = "site-chip";
-      const label = document.createElement("span"); label.textContent = site;
-      const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.setAttribute("aria-label", `Remove ${site}`);
-      remove.addEventListener("click", () => { state.sites.splice(index, 1); saveState(); renderSites(); if (state.running && state.mode === "focus") setExtensionFocus(true); });
-      chip.append(label, remove); els.siteList.append(chip);
+  function renderTodos() {
+    els.todoList.textContent = "";
+    state.todos.forEach(todo => {
+      const item = document.createElement("li");
+      item.className = "todo-item";
+      item.classList.toggle("is-done", todo.done);
+      const check = document.createElement("input");
+      check.type = "checkbox";
+      check.checked = todo.done;
+      check.setAttribute("aria-label", `Mark ${todo.text} ${todo.done ? "incomplete" : "complete"}`);
+      check.addEventListener("change", () => { todo.done = check.checked; saveState(); renderTodos(); });
+      const label = document.createElement("span");
+      label.textContent = todo.text;
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.textContent = "×";
+      remove.setAttribute("aria-label", `Remove ${todo.text}`);
+      remove.addEventListener("click", () => { state.todos = state.todos.filter(item => item.id !== todo.id); saveState(); renderTodos(); });
+      item.append(check, label, remove);
+      els.todoList.append(item);
     });
-  }
-
-  function cleanDomain(value) {
-    try {
-      const withScheme = /^https?:\/\//i.test(value) ? value : `https://${value}`;
-      return new URL(withScheme).hostname.replace(/^www\./, "").toLowerCase();
-    } catch { return ""; }
+    const remaining = state.todos.filter(todo => !todo.done).length;
+    els.todoCount.textContent = `${remaining} left`;
+    els.todoEmpty.hidden = state.todos.length > 0;
   }
 
   function renderRhythm() {
@@ -163,9 +155,9 @@
 
   function renderAll() {
     document.querySelectorAll(".mode").forEach(button => { const selected = button.dataset.mode === state.mode; button.classList.toggle("active", selected); button.setAttribute("aria-selected", String(selected)); });
-    els.intention.value = state.intention; els.blockToggle.checked = state.blocking; els.volume.value = state.volume;
+    els.intention.value = state.intention; els.volume.value = state.volume;
     $("focusMinutes").value = state.durations.focus; $("shortMinutes").value = state.durations.short; $("longMinutes").value = state.durations.long;
-    applyTheme(); renderBreathing(); renderTimer(); renderSites(); renderRhythm();
+    applyTheme(); renderBreathing(); renderTimer(); renderTodos(); renderRhythm();
   }
 
   function applyTheme() {
@@ -208,8 +200,7 @@
   document.querySelectorAll(".mode").forEach(button => button.addEventListener("click", () => setMode(button.dataset.mode)));
   els.start.addEventListener("click", toggleTimer); els.reset.addEventListener("click", resetTimer);
   els.intention.addEventListener("input", () => { state.intention = els.intention.value; clearTimeout(saveTimer); saveTimer = setTimeout(() => { saveState(); els.saved.classList.add("show"); setTimeout(() => els.saved.classList.remove("show"), 1200); }, 400); });
-  els.blockToggle.addEventListener("change", () => { state.blocking = els.blockToggle.checked; saveState(); if (state.running && state.mode === "focus") setExtensionFocus(state.blocking); });
-  els.siteForm.addEventListener("submit", (event) => { event.preventDefault(); const domain = cleanDomain(els.siteInput.value.trim()); if (!domain) return toast("Try a site like reddit.com"); if (!state.sites.includes(domain)) state.sites.push(domain); els.siteInput.value = ""; saveState(); renderSites(); if (state.running && state.mode === "focus") setExtensionFocus(true); });
+  els.todoForm.addEventListener("submit", (event) => { event.preventDefault(); const text = els.todoInput.value.trim(); if (!text) return; state.todos.push({ id: `${Date.now()}-${Math.random().toString(16).slice(2)}`, text, done: false }); els.todoInput.value = ""; saveState(); renderTodos(); });
   els.sound.addEventListener("click", toggleSound);
   els.volume.addEventListener("input", () => { state.volume = Number(els.volume.value); if (audio?.playing) audio.gain.gain.setTargetAtTime(state.volume / 100 * .42, audio.context.currentTime, .04); saveState(); });
   $("settingsButton")?.addEventListener("click", () => els.settings.showModal());
@@ -217,12 +208,10 @@
   els.breathToggle.addEventListener("click", () => { state.breathEnabled = !state.breathEnabled; saveState(); renderBreathing(); });
   $("breathSpace").addEventListener("click", () => { state.breathEnabled = !state.breathEnabled; saveState(); renderBreathing(); });
   $("saveSettings").addEventListener("click", (event) => { event.preventDefault(); state.durations = { focus: Math.max(1, Number($("focusMinutes").value) || 25), short: Math.max(1, Number($("shortMinutes").value) || 5), long: Math.max(1, Number($("longMinutes").value) || 15) }; resetTimer(); els.settings.close(); toast("Your rhythm is saved."); });
-  $("extensionNote").addEventListener("click", () => els.setup.showModal()); $("closeSetup").addEventListener("click", () => els.setup.close()); $("gotIt").addEventListener("click", () => els.setup.close());
-  document.addEventListener("keydown", (event) => { if (["INPUT","TEXTAREA"].includes(document.activeElement.tagName) || els.settings.open || els.setup.open) return; if (event.code === "Space") { event.preventDefault(); toggleTimer(); } if (event.key.toLowerCase() === "r") resetTimer(); });
+  document.addEventListener("keydown", (event) => { if (["INPUT","TEXTAREA"].includes(document.activeElement.tagName) || els.settings.open) return; if (event.code === "Space") { event.preventDefault(); toggleTimer(); } if (event.key.toLowerCase() === "r") resetTimer(); });
 
   $("today").textContent = new Intl.DateTimeFormat(undefined, { weekday: "long", month: "long", day: "numeric" }).format(new Date());
   if (state.running && state.endAt) { if (state.endAt <= Date.now()) completeTimer(); else tickHandle = setInterval(tick, 250); }
-  if (isExtension) { $("extensionNote").textContent = "quiet mode is installed ✓"; els.blockStatus.textContent = state.running && state.mode === "focus" ? "Quiet mode is active across this browser." : "Distracting sites pause when focus begins."; }
   setInterval(() => { if (state.breathEnabled) renderBreathing(); }, 1000);
   renderAll();
 })();

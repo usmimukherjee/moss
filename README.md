@@ -5,6 +5,8 @@ A quiet, local-first focus companion in forest green, rain, and fog.
 ## What works
 
 - Pomodoro focus, short-break, and long-break modes
+- Deep forest dark mode by default, with an optional light theme
+- A radial time-remaining visualization and optional paced-breathing anchor
 - Custom timer lengths, keyboard shortcuts, pause/reset, and refresh-safe state
 - A single auto-saving focus intention
 - Locally generated rain ambience with volume control

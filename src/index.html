@@ -26,9 +26,12 @@
           <span>still.</span>
         </a>
         <div class="today" id="today">Thursday, October 15</div>
-        <button class="icon-button" id="settingsButton" aria-label="Open settings" title="Settings">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2v-.08a1.7 1.7 0 0 0-1.1-1.57 1.7 1.7 0 0 0-1.88.34l-.06.06-1.41-1.41.06-.06A1.7 1.7 0 0 0 9.35 15a1.7 1.7 0 0 0-1.56-1.03H7.7v-2h.09a1.7 1.7 0 0 0 1.56-1.1A1.7 1.7 0 0 0 9 9l-.06-.06 1.41-1.42.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.03-1.56V6.3h2v.08a1.7 1.7 0 0 0 1.1 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.42 1.42-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H21v2h-.08A1.7 1.7 0 0 0 19.4 15Z"/></svg>
-        </button>
+        <div class="top-actions">
+          <button class="icon-button" id="themeButton" aria-label="Switch to light mode" title="Switch theme"><span aria-hidden="true">☾</span></button>
+          <button class="icon-button" id="settingsButton" aria-label="Open settings" title="Settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2v-.08a1.7 1.7 0 0 0-1.1-1.57 1.7 1.7 0 0 0-1.88.34l-.06.06-1.41-1.41.06-.06A1.7 1.7 0 0 0 9.35 15a1.7 1.7 0 0 0-1.56-1.03H7.7v-2h.09a1.7 1.7 0 0 0 1.56-1.1A1.7 1.7 0 0 0 9 9l-.06-.06 1.41-1.42.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.03-1.56V6.3h2v.08a1.7 1.7 0 0 0 1.1 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.42 1.42-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H21v2h-.08A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+          </button>
+        </div>
       </header>
 
       <main>
@@ -39,8 +42,18 @@
             <button class="mode" data-mode="long" role="tab" aria-selected="false">long break</button>
           </div>
 
-          <p class="eyebrow" id="timerHeading">one thing at a time</p>
-          <div class="timer" id="timer" aria-live="polite">25:00</div>
+          <div class="visual-clock">
+            <svg class="timer-ring" viewBox="0 0 420 420" aria-hidden="true">
+              <circle class="ring-glow" cx="210" cy="210" r="182" />
+              <circle class="ring-track" cx="210" cy="210" r="182" />
+              <circle class="ring-progress" id="ringProgress" pathLength="100" cx="210" cy="210" r="182" />
+            </svg>
+            <div class="clock-content">
+              <p class="eyebrow" id="timerHeading">one thing at a time</p>
+              <div class="timer" id="timer" aria-live="polite">25:00</div>
+              <div class="focus-cue" id="focusCue">ready when you are</div>
+            </div>
+          </div>
           <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
 
           <div class="timer-actions">
@@ -90,6 +103,17 @@
               <span class="play" id="soundPlay">▶</span>
             </button>
             <label class="volume"><span>soft</span><input type="range" id="volume" min="0" max="100" value="35" /><span>steady</span></label>
+          </div>
+
+          <div class="panel anchor-panel">
+            <div class="panel-heading split">
+              <div><span class="panel-icon">○</span><h2>visual anchor</h2></div>
+              <button class="tiny-toggle" id="breathToggle" aria-pressed="true">on</button>
+            </div>
+            <button class="breath-space" id="breathSpace" aria-label="Toggle breathing guide">
+              <span class="breath-ripple ripple-one"></span><span class="breath-ripple ripple-two"></span><span class="breath-orb"></span>
+              <span class="breath-label"><b id="breathCue">breathe in</b><small>follow the slow pulse</small></span>
+            </button>
           </div>
 
           <div class="panel rhythm-panel">

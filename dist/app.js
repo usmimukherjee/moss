@@ -10,7 +10,9 @@
     blocking: true,
     sessions: 0,
     sessionDate: new Date().toDateString(),
-    volume: 35
+    volume: 35,
+    theme: "dark",
+    breathEnabled: true
   };
 
   const $ = (id) => document.getElementById(id);
@@ -18,7 +20,9 @@
     timer: $("timer"), progress: $("progressBar"), start: $("startButton"), startLabel: $("startLabel"), startIcon: $("startIcon"), reset: $("resetButton"),
     intention: $("intention"), saved: $("savedNote"), blockToggle: $("blockToggle"), blockStatus: $("blockStatus"), siteList: $("siteList"), siteForm: $("siteForm"), siteInput: $("siteInput"),
     sound: $("soundButton"), soundState: $("soundState"), soundPlay: $("soundPlay"), volume: $("volume"), sessionCount: $("sessionCount"), rhythm: $("rhythmTrack"), rhythmMessage: $("rhythmMessage"),
-    settings: $("settingsDialog"), setup: $("setupDialog"), toast: $("toast")
+    settings: $("settingsDialog"), setup: $("setupDialog"), toast: $("toast"),
+    ring: $("ringProgress"), focusCue: $("focusCue"), focusCard: document.querySelector(".focus-card"),
+    anchor: document.querySelector(".anchor-panel"), breathCue: $("breathCue"), breathToggle: $("breathToggle"), theme: $("themeButton")
   };
 
   const isExtension = typeof chrome !== "undefined" && Boolean(chrome.runtime?.id);
@@ -26,6 +30,7 @@
   let tickHandle = null;
   let audio = null;
   let saveTimer = null;
+  const breathStartedAt = Date.now();
 
   function loadState() {
     try {
@@ -49,7 +54,11 @@
     els.timer.textContent = formatTime(remaining);
     document.title = state.running ? `${formatTime(remaining)} · Still` : "Still — focus, softly";
     const total = durationSeconds();
-    els.progress.style.width = `${Math.min(100, Math.max(0, ((total - remaining) / total) * 100))}%`;
+    const completed = Math.min(100, Math.max(0, ((total - remaining) / total) * 100));
+    els.progress.style.width = `${completed}%`;
+    els.ring.style.strokeDashoffset = String(completed);
+    els.focusCard.classList.toggle("is-running", state.running);
+    els.focusCue.textContent = state.running ? (state.mode === "focus" ? "stay with this moment" : "let your attention soften") : "ready when you are";
     els.startLabel.textContent = state.running ? "pause" : state.remaining < total ? "continue" : state.mode === "focus" ? "begin focus" : "begin break";
     els.startIcon.textContent = state.running ? "Ⅱ" : "▶";
   }
@@ -156,7 +165,21 @@
     document.querySelectorAll(".mode").forEach(button => { const selected = button.dataset.mode === state.mode; button.classList.toggle("active", selected); button.setAttribute("aria-selected", String(selected)); });
     els.intention.value = state.intention; els.blockToggle.checked = state.blocking; els.volume.value = state.volume;
     $("focusMinutes").value = state.durations.focus; $("shortMinutes").value = state.durations.short; $("longMinutes").value = state.durations.long;
-    renderTimer(); renderSites(); renderRhythm();
+    applyTheme(); renderBreathing(); renderTimer(); renderSites(); renderRhythm();
+  }
+
+  function applyTheme() {
+    document.documentElement.dataset.theme = state.theme;
+    const light = state.theme === "light";
+    els.theme.innerHTML = `<span aria-hidden="true">${light ? "☀" : "☾"}</span>`;
+    els.theme.setAttribute("aria-label", light ? "Switch to dark mode" : "Switch to light mode");
+  }
+
+  function renderBreathing() {
+    els.anchor.classList.toggle("is-paused", !state.breathEnabled);
+    els.breathToggle.textContent = state.breathEnabled ? "on" : "off";
+    els.breathToggle.setAttribute("aria-pressed", String(state.breathEnabled));
+    els.breathCue.textContent = state.breathEnabled ? (Math.floor((Date.now() - breathStartedAt) / 4000) % 2 ? "breathe out" : "breathe in") : "guide paused";
   }
 
   function toast(message) { els.toast.textContent = message; els.toast.classList.add("show"); setTimeout(() => els.toast.classList.remove("show"), 2500); }
@@ -190,6 +213,9 @@
   els.sound.addEventListener("click", toggleSound);
   els.volume.addEventListener("input", () => { state.volume = Number(els.volume.value); if (audio?.playing) audio.gain.gain.setTargetAtTime(state.volume / 100 * .42, audio.context.currentTime, .04); saveState(); });
   $("settingsButton").addEventListener("click", () => els.settings.showModal());
+  els.theme.addEventListener("click", () => { state.theme = state.theme === "dark" ? "light" : "dark"; saveState(); applyTheme(); });
+  els.breathToggle.addEventListener("click", () => { state.breathEnabled = !state.breathEnabled; saveState(); renderBreathing(); });
+  $("breathSpace").addEventListener("click", () => { state.breathEnabled = !state.breathEnabled; saveState(); renderBreathing(); });
   $("saveSettings").addEventListener("click", (event) => { event.preventDefault(); state.durations = { focus: Math.max(1, Number($("focusMinutes").value) || 25), short: Math.max(1, Number($("shortMinutes").value) || 5), long: Math.max(1, Number($("longMinutes").value) || 15) }; resetTimer(); els.settings.close(); toast("Your rhythm is saved."); });
   $("extensionNote").addEventListener("click", () => els.setup.showModal()); $("closeSetup").addEventListener("click", () => els.setup.close()); $("gotIt").addEventListener("click", () => els.setup.close());
   document.addEventListener("keydown", (event) => { if (["INPUT","TEXTAREA"].includes(document.activeElement.tagName) || els.settings.open || els.setup.open) return; if (event.code === "Space") { event.preventDefault(); toggleTimer(); } if (event.key.toLowerCase() === "r") resetTimer(); });
@@ -197,5 +223,6 @@
   $("today").textContent = new Intl.DateTimeFormat(undefined, { weekday: "long", month: "long", day: "numeric" }).format(new Date());
   if (state.running && state.endAt) { if (state.endAt <= Date.now()) completeTimer(); else tickHandle = setInterval(tick, 250); }
   if (isExtension) { $("extensionNote").textContent = "quiet mode is installed ✓"; els.blockStatus.textContent = state.running && state.mode === "focus" ? "Quiet mode is active across this browser." : "Distracting sites pause when focus begins."; }
+  setInterval(() => { if (state.breathEnabled) renderBreathing(); }, 1000);
   renderAll();
 })();

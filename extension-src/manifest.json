@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Moss — focus, softly",
+  "name": "Moss - Micro Objectives, Small Sprints",
   "version": "1.0.0",
-  "description": "A quiet Pomodoro timer and gentle focus companion.",
+  "description": "A pomodoro timer and focus companion.",
   "background": { "service_worker": "background.js" },
   "action": { "default_title": "Open Moss" },
   "commands": {

@@ -6,6 +6,7 @@ A quiet, local-first focus companion in muted forest green with subtle pixel-art
 
 - Pomodoro focus, short-break, and long-break modes
 - Matte forest dark mode by default, with an optional light theme and low-contrast monstera and ZZ plant pixel art
+- A tiny pixel-art elf companion that sits quietly beside the focus timer
 - Lexend-first typography with Verdana and Open Sans fallbacks for clear, uncrowded reading
 - A radial time-remaining visualization and optional paced-breathing anchor
 - Custom timer lengths, keyboard shortcuts, pause/reset, and refresh-safe state
